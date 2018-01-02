@@ -8,10 +8,9 @@
         http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-        <!-- 扫描类包，将标注Spring注解的类自动转化为Bean，同时完成Bean的注入  -->
 
 
-    <!--  定义一个使用DBCP实现的数据源 -->
+    <!--  定义一个使用c3p0实现的数据源 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close"
           p:driverClass="com.mysql.jdbc.Driver"
@@ -24,9 +23,6 @@
           p:maxStatements="50"
           p:minPoolSize="10"
     />
-    <!-- 定义JDBC模板Bean   -->
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
-          p:dataSource-ref="dataSource"/>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
