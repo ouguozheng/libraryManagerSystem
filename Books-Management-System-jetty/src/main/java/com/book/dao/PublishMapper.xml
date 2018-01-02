@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.PublishMapper">
+    <resultMap id="publishMap" type="com.book.domain.Publish">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="info" property="info" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="publish_list">
+        id,name,phone,address,info
+    </sql>
+    <select id="selectAllPublish" resultType="com.book.domain.Publish">
+        select
+        <include refid="publish_list"/>
+        from publish
+    </select>
+    <update id="updatePublish" parameterType="com.book.domain.Publish">
+        UPDATE publish
+        <set>
+            name=#{name},
+            phone=#{phone},
+            address=#{address},
+            info=#{info}
+        </set>
+        where id=#{id}
+    </update>
+    <select id="selectPublishById" parameterType="java.lang.Integer" resultType="com.book.domain.Publish">
+        SELECT
+        <include refid="publish_list"/>
+        FROM publish WHERE id=#{id}
+    </select>
+    <insert id="insertPublish" parameterType="com.book.domain.Publish">
+        INSERT INTO publish(id,name,phone,address,info)
+        VALUE (
+        #{id},
+        #{name},
+        #{phone},
+        #{address},
+        #{info}
+        )
+    </insert>
+    <delete id="deletePublish" parameterType="java.lang.Integer">
+        DELETE FROM publish where id=#{id}
+    </delete>
+    <select id="selectMaxPublishId" resultType="java.lang.Integer">
+        SELECT IFNULL(MAX(id),0) FROM publish
+    </select>
+</mapper>

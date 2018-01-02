@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.LendMapper">
+    <resultMap id="LendMap" type="com.book.domain.Lend">
+        <id column="sernum" property="sernum" jdbcType="BIGINT"/>
+        <result column="bookId" property="bookId" jdbcType="BIGINT"/>
+        <result column="readerId" property="readerId" jdbcType="INTEGER"/>
+        <result column="lendDate" property="lendDate" jdbcType="VARCHAR"/>
+        <result column="backDate" property="backDate" jdbcType="VARCHAR"/>
+        <result column="vaild" property="vaild" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="lend_list">
+        sernum,bookId,readerId,lendDate,backDate,vaild
+    </sql>
+    <select id="selectAllLend" resultType="com.book.domain.Lend">
+        select
+        <include refid="lend_list"/>
+        from lend_list
+    </select>
+    <select id="selectLendByBookId" parameterType="java.lang.Long" resultType="com.book.domain.Lend">
+        SELECT
+        <include refid="lend_list"/>
+        from lend_list WHERE bookId=#{bookId}
+    </select>
+    <update id="updateLend" parameterType="com.book.domain.Lend">
+        UPDATE lend_list
+        <set>
+            backDate = #{backDate},
+            vaild=#{vaild}
+        </set>
+        where sernum=#{sernum}
+    </update>
+    <select id="selectLendBySernum" parameterType="java.lang.Integer" resultType="com.book.domain.Lend">
+        SELECT
+        <include refid="lend_list"/>
+        FROM lend_list WHERE sernum=#{sernum}
+    </select>
+    <select id="selectMaxId" resultType="java.lang.Integer">
+        SELECT IFNULL(MAX(sernum),2017000) FROM lend_list
+    </select>
+    <select id="selectLendByBookIdAndVaild" resultType="com.book.domain.Lend" parameterType="java.util.Map">
+        SELECT
+        <include refid="lend_list"/>
+        from lend_list WHERE bookId=#{bookId} and vaild = #{vaild}
+    </select>
+    <insert id="insertLend" parameterType="com.book.domain.Lend">
+        INSERT INTO lend_list(sernum,bookId,readerId,lendDate,backDate,vaild)
+        VALUE(
+        #{sernum},
+        #{bookId},
+        #{readerId},
+        #{lendDate},
+        #{backDate},
+        #{vaild}
+        )
+    </insert>
+    <select id="selectLendByReaderId" parameterType="java.lang.Integer" resultType="com.book.domain.Lend">
+        SELECT
+        <include refid="lend_list"/>
+        FROM lend_list WHERE readerId=#{readerId}
+    </select>
+</mapper>

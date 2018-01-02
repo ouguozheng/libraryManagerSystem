@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.BookMapper">
+    <resultMap id="BookMap" type="com.book.domain.Book">
+        <id column="bookId" property="bookId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="author" property="author" jdbcType="VARCHAR"/>
+        <result column="publish" property="publish" jdbcType="VARCHAR"/>
+        <result column="isbn" property="isbn" jdbcType="VARCHAR"/>
+        <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+        <result column="lan" property="lan" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="pubdate" property="pubdate" jdbcType="VARCHAR"/>
+        <result column="classId" property="classId" jdbcType="INTEGER"/>
+        <result column="pressmark" property="pressmark" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="book_list">
+        bookId,name,author,publish,ISBN,introduction,lan,price,pubdate,classId,pressmark,state,type
+    </sql>
+    <select id="selectAllBook" resultType="com.book.domain.Book">
+        select
+        <include refid="book_list"/>
+        from book_info
+    </select>
+    <select id="selectBookByBookId" resultType="com.book.domain.Book" parameterType="java.lang.Long">
+        SELECT
+        <include refid="book_list"/>
+        FROM book_info WHERE
+        <if test="bookId != null">
+            bookId = #{bookId}
+        </if>
+    </select>
+    <update id="updateBooK" parameterType="com.book.domain.Book">
+        UPDATE book_info
+        <set>
+            name = #{name},
+            author = #{author},
+            publish = #{publish},
+            ISBN = #{isbn},
+            introduction = #{introduction},
+            lan = #{lan},
+            price = #{price},
+            pubdate = #{pubdate},
+            classId = #{classId},
+            pressmark = #{pressmark},
+            state = #{state},
+            type = #{type}
+        </set>
+        WHERE bookId = #{bookId}
+    </update>
+    <delete id="deleteBookByBookId" parameterType="java.lang.Long">
+        DELETE FROM book_info
+        <if test="bookId != null">
+            WHERE bookId = #{bookId}
+        </if>
+    </delete>
+    <insert id="insertBook" parameterType="com.book.domain.Book">
+        INSERT into book_info (bookId,name,author,publish,ISBN,introduction,lan,price,pubdate,classId,pressmark,state,type)
+        VALUE (#{bookId},#{name},#{author},#{publish},#{isbn},#{introduction},#{lan},#{price},#{pubdate},#{classId},#{pressmark},#{state},#{type})
+    </insert>
+    <select id="selectMaxBookId" resultType="java.lang.Long">
+        select IFNULL(max(bookId),100001) from book_info
+    </select>
+    <select id="selectBookByWord" parameterType="java.lang.String" resultType="com.book.domain.Book">
+        SELECT
+        <include refid="book_list"/>
+        FROM book_info WHERE name like CONCAT('%',#{word},'%') OR bookId like CONCAT('%',#{word},'%')
+    </select>
+</mapper>

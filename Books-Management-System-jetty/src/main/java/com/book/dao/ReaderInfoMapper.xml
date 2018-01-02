@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.ReaderInfoMapper">
+    <resultMap id="readerInfoMap" type="com.book.domain.ReaderInfo">
+        <id column="readerId" property="readerId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="birth" property="birth" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="telcode" property="telcode" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="readerInfo_list">
+        readerId,name,sex,birth,address,telcode
+    </sql>
+    <select id="selectAllReaderInfo" resultType="com.book.domain.ReaderInfo">
+        select
+        <include refid="readerInfo_list"/>
+        from reader_info
+    </select>
+    <insert id="insertReaderInfo" parameterType="com.book.domain.ReaderInfo">
+        INSERT INTO reader_info(readerId, name, sex, birth, address, telcode)
+        VALUE(
+        #{readerId},
+        #{name},
+        #{sex},
+        #{birth},
+        #{address},
+        #{telcode}
+        )
+    </insert>
+    <select id="selectByReaderId" parameterType="java.lang.Integer" resultType="com.book.domain.ReaderInfo">
+        SELECT
+        <include refid="readerInfo_list"/>
+        FROM reader_info WHERE readerId=#{readerId}
+    </select>
+    <update id="updateReaderInfo" parameterType="com.book.domain.ReaderInfo">
+        UPDATE reader_info
+        <set>
+            name=#{name},
+            sex=#{sex},
+            birth=#{birth},
+            address=#{address},
+            telcode=#{telcode}
+        </set>
+        WHERE readerId=#{readerId}
+    </update>
+    <delete id="deleteReaderInfoByReaderId" parameterType="java.lang.Integer">
+        DELETE FROM reader_info WHERE readerId=#{readerId}
+    </delete>
+</mapper>

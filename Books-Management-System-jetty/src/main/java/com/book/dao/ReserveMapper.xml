@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.ReserveMapper">
+    <resultMap id="reserveMap" type="com.book.domain.Reserve">
+        <id column="reserveId" property="reserveId" jdbcType="INTEGER"/>
+        <result column="readerId" property="readerId" jdbcType="INTEGER"/>
+        <result column="bookId" property="bookId" jdbcType="BIGINT"/>
+        <result column="reserveTime" property="reserveTime" jdbcType="VARCHAR"/>
+        <result column="vaild" property="vaild" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="reserve_list">
+        reserveId,readerId,bookId,reserveTime,vaild
+    </sql>
+    <select id="selectAllReserve" resultType="com.book.domain.Reserve">
+        select
+        <include refid="reserve_list"/>
+        from reserve
+    </select>
+    <insert id="insertReserve" parameterType="com.book.domain.Reserve">
+        INSERT INTO reserve(reserveId,readerId,bookId,reserveTime,vaild)
+        VALUE(#{reserveId},#{readerId},#{bookId},#{reserveTime},#{vaild})
+    </insert>
+    <select id="selectReserveByReaderId" parameterType="java.lang.Integer" resultType="com.book.domain.Reserve">
+        SELECT
+        <include refid="reserve_list"/>
+        FROM reserve WHERE readerId=#{readerId}
+    </select>
+    <select id="selectMaxReserveId" resultType="java.lang.Integer">
+        SELECT IFNULL(Max(reserveId),0) from reserve
+    </select>
+    <update id="updateReserve" parameterType="com.book.domain.Reserve">
+        UPDATE reserve
+        <set>
+            vaild=#{vaild}
+        </set>
+        WHERE reserveId=#{reserveId}
+    </update>
+    <select id="selectResveBySuccessVaild" parameterType="java.lang.Integer" resultType="com.book.domain.Reserve">
+        SELECT
+        <include refid="reserve_list"/>
+        FROM reserve WHERE vaild=#{vaild}
+    </select>
+    <select id="selectReserveByReaderIdAndBookIdAndVaild" parameterType="java.util.Map" resultType="com.book.domain.Reserve">
+        SELECT
+        <include refid="reserve_list"/>
+        FROM reserve WHERE readerId=#{readerId} AND vaild=#{vaild} AND bookId=#{bookId}
+    </select>
+</mapper>

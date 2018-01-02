@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.SortMapper">
+    <resultMap id="BookMap" type="com.book.domain.Sort">
+        <id column="classId" property="classId" jdbcType="INTEGER"/>
+        <result column="className" property="className" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="sort_list">
+        classId,className
+    </sql>
+    <select id="selectAllSort" resultType="com.book.domain.Sort">
+        SELECT
+        <include refid="sort_list"/>
+        FROM class_info;
+    </select>
+    <insert id="insertSort" parameterType="com.book.domain.Sort">
+        INSERT INTO book_info(classId,className)
+        VALUE {
+        #{classId},
+        #{className}
+        }
+    </insert>
+    <update id="updateSort" parameterType="com.book.domain.Sort">
+        UPDATE class_info
+        <set>
+            className=#{className}
+        </set>
+        WHERE classId=#{classId}
+    </update>
+    <delete id="deleteSortByID" parameterType="java.lang.Integer">
+        DELETE FROM class_info WHERE classId=#{classId}
+    </delete>
+    <select id="selectById" parameterType="java.lang.Integer" resultType="com.book.domain.Sort">
+        SELECT
+        <include refid="sort_list"/>
+        FROM class_info WHERE classId=#{classId}
+    </select>
+</mapper>

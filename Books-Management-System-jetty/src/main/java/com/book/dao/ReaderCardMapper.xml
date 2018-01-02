@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.dao.ReaderCardMapper">
+    <resultMap id="readerCardMap" type="com.book.domain.ReaderCard">
+        <id column="readerId" property="readerId" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="passwd" property="passwd" jdbcType="VARCHAR"/>
+        <result column="cardState" property="cardState" jdbcType="INTEGER"/>
+        <result column="cardType" property="cardType" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="readerCard_list">
+        readerId,name,passwd,cardState,cardType
+    </sql>
+    <select id="selectAllReaderCard" resultType="com.book.domain.ReaderCard">
+        select
+        <include refid="readerCard_list"/>
+        from reader_card
+    </select>
+    <select id="selectMaxReaderCardId" resultType="java.lang.Integer">
+        SELECT MAX(readerId) FROM reader_card
+    </select>
+    <select id="selectReaderCardById" parameterType="java.lang.Integer" resultType="com.book.domain.ReaderCard">
+        SELECT
+        <include refid="readerCard_list"/>
+        FROM reader_card WHERE readerId=#{readerId}
+    </select>
+    <insert id="insertReaderCard" parameterType="com.book.domain.ReaderCard">
+        INSERT INTO reader_card(readerId, name,passwd,cardState,cardType)
+        VALUE (
+        #{readerId},
+        #{name},
+        #{passwd},
+        #{cardState},
+        #{cardType}
+        )
+    </insert>
+    <update id="updateReaderCard" parameterType="com.book.domain.ReaderCard">
+        UPDATE reader_card
+        <set>
+            name=#{name},
+            passwd=#{passwd},
+            cardState=#{cardState},
+            cardType=#{cardType}
+        </set>
+        WHERE readerId=#{readerId}
+    </update>
+    <delete id="deleteReaderCardById" parameterType="java.lang.Integer">
+        DELETE FROM reader_card WHERE readerId=#{readerId}
+    </delete>
+    <select id="selectReaderCardByIdAndPass" parameterType="java.util.Map" resultType="com.book.domain.ReaderCard">
+        SELECT
+        <include refid="readerCard_list"/>
+        FROM reader_card WHERE readerId=#{readerId} AND passwd=#{passwd}
+    </select>
+</mapper>
